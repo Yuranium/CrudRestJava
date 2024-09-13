@@ -23,7 +23,7 @@ public class UserController
         service.saveUser(user);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/all")
     public List<User> getUsers()
     {
         return service.getUsers();
@@ -41,7 +41,7 @@ public class UserController
         service.updateUser(id, user);
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/delete")
     public void deleteUser(@RequestParam("id") Long id)
     {
         service.deleteUser(id);
