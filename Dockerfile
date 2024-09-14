@@ -1,15 +1,15 @@
-FROM bellsoft/liberica-openjre-alpine:22.0.2 AS layers
-WORKDIR /application
-COPY target/*.jar app.jar
-RUN java -Djarmode=layertools -jar app.jar extract
+FROM node:alpine
 
-FROM bellsoft/liberica-openjre-alpine:22.0.2
-VOLUME /tmp
-RUN adduser -S spring-user
-USER spring-user
-COPY --from=layers /application/dependencies/ ./
-COPY --from=layers /application/spring-boot-loader/ ./
-COPY --from=layers /application/snapshot-dependencies/ ./
-COPY --from=layers /application/application/ ./
+RUN npm install -g @redocly/cli
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+WORKDIR /app
+
+COPY openapi.yaml /app/openapi.yaml
+
+RUN redocly build-docs /app/openapi.yaml --output /app/index.html
+
+FROM nginx:alpine
+
+COPY --from=0 /app/index.html /usr/share/nginx/html/index.html
+
+EXPOSE 80

@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: Crud Users
+  version: 1.0.0
+  description: API для управления пользователями в мессенджере.
+servers:
+  - url: http://localhost:8080
+security: []
+paths:
+  /user/all:
+    get:
+
+      summary: Получение списка всех пользователей
+      responses:
+        '200':
+          description: Успешное получение списка пользователей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User0'
+  /user:
+    post:
+      summary: Добавление нового пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User1'
+      responses:
+        '201':
+          description: Пользователь успешно добавлен
+    get:
+      summary: Получение информации об отдельном пользователе
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Успешное получение данных о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User0'
+        '404':
+          description: Пользователь не найден
+  /user/update:
+    patch:
+      summary: Обновление информации о пользователе
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User1'
+      responses:
+        '200':
+          description: Информация о пользователе обновлена
+  /user/delete:
+    delete:
+      summary: Удаление пользователя
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Пользователь удалён
+components:
+  schemas:
+    User0:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Уникальный идентификатор пользователя
+        name:
+          type: string
+          description: Имя пользователя
+        age:
+          type: number
+          description: Возраст пользователя
+        email:
+          type: string
+          description: Почта пользователя
+        role:
+          type: string
+          description: Роль пользователя
+    User1:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Имя пользователя
+        age:
+          type: number
+          description: Возраст пользователя
+        email:
+          type: string
+          description: Почта пользователя
+        role:
+          type: string
+          description: Роль пользователя
